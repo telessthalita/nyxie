@@ -2154,6 +2154,69 @@ hr {
   object-fit: cover;
 }
 
+/* Trilha sonora */
+.sound-toggle {
+  position: fixed;
+  right: 20px;
+  bottom: 88px;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+.sound-toggle:hover {
+  transform: scale(1.08);
+}
+.sound-toggle img {
+  grid-area: 1 / 1;
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 16px rgb(0 0 0 / 0.45));
+}
+.sound-toggle.is-on img {
+  filter: drop-shadow(0 0 14px rgb(240 107 168 / 0.7));
+}
+/* Os dois quadros do sino se alternam, como no gif do design. */
+.sound-frame.f2 {
+  animation: sino 0.5s steps(1) infinite;
+}
+.sound-frame.f1 {
+  animation: sino 0.5s steps(1) infinite reverse;
+}
+@keyframes sino {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+.sound-label {
+  position: absolute;
+  right: calc(100% + 10px);
+  top: 50%;
+  translate: 0 -50%;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--ink);
+  font: 700 11px/1 var(--pixel);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  color: var(--pink-light);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.sound-toggle:hover .sound-label,
+.sound-toggle:focus-visible .sound-label,
+.sound-toggle.is-blocked .sound-label {
+  opacity: 1;
+}
+
 /* ---------- Responsivo ---------- */
 
 @media (max-width: 1280px) {
@@ -2454,6 +2517,19 @@ hr {
   }
   .modal-video {
     border-radius: 18px;
+  }
+}
+
+@media (max-width: 700px) {
+  .sound-toggle {
+    right: 10px;
+    bottom: 74px;
+    width: 52px;
+    height: 52px;
+  }
+  .sound-toggle img {
+    width: 52px;
+    height: 52px;
   }
 }
 

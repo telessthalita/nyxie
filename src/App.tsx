@@ -3,6 +3,7 @@ import { Featured, Hero, Marquee, MobileMenu, Navbar, TrailerModal } from './sec
 import { Character, Gameplay, Poses, Skins, Story } from './sections/Middle'
 import { Editions, Faq, FinalCta, Footer, Hub, Worlds } from './sections/Bottom'
 import { Xray } from './bastidores/Xray'
+import { Soundtrack } from './components/Soundtrack'
 
 export default function App() {
   const [menu, setMenu] = useState(false)
@@ -32,6 +33,7 @@ export default function App() {
       <Footer />
       <MobileMenu open={menu} onClose={closeMenu} onTrailer={openTrailer} />
       <TrailerModal open={trailer} onClose={closeTrailer} />
+      <Soundtrack />
       <Xray />
     </>
   )
