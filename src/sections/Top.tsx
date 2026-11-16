@@ -150,6 +150,8 @@ export function Hero({ onTrailer }: { onTrailer: () => void }) {
             <Sprite
               src="/assets/hero-loop.mp4"
               crop={{ fw: 380, fh: 802, w: 1669, h: 931, x: -633, y: -98 }}
+              eager
+              poster="/assets/poster-hero.webp"
               alt="Nyxie em loop de animação"
             />
             <span className="badge badge-video">

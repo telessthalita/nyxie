@@ -115,6 +115,16 @@ hr {
   position: absolute;
 }
 
+/*
+ * Antes da primeira interação a página fica parada (ver src/wake.ts):
+ * as animações em loop esperam pausadas no primeiro quadro, sem custo de CPU.
+ */
+html:not(.is-awake) *,
+html:not(.is-awake) *::before,
+html:not(.is-awake) *::after {
+  animation-play-state: paused !important;
+}
+
 /* ---------- Peças base ---------- */
 
 .btn {
@@ -1485,7 +1495,8 @@ hr {
   font-size: 11px;
   line-height: 13px;
   letter-spacing: 0.08em;
-  color: #b83c7e;
+  /* Um tom abaixo do #b83c7e do Figma: com 11px, o original não passava no contraste mínimo (4,5:1). */
+  color: #a02f6a;
 }
 
 /* Jogabilidade */
@@ -1577,6 +1588,93 @@ hr {
   gap: 8px;
   width: min(360px, 50%);
 }
+/* HUD jogável */
+.hud.is-playing {
+  cursor: pointer;
+  outline: none;
+  border-color: var(--pink);
+  touch-action: manipulation;
+  user-select: none;
+}
+.hud-note.is-live {
+  left: 0;
+  background: var(--pink);
+  will-change: transform;
+}
+.hud-note.is-live[data-tone='b'] {
+  background: var(--purple);
+}
+.hud-hit.is-hit {
+  animation: hud-hit-flash 0.25s ease-out;
+}
+@keyframes hud-hit-flash {
+  0% {
+    background: rgb(255 168 207 / 0.6);
+    box-shadow: 0 0 30px rgb(240 107 168 / 0.9);
+  }
+}
+.hud.is-playing .hud-judgement {
+  animation: hud-pop 0.3s ease-out;
+}
+.hud-judgement.is-good {
+  color: var(--lilac);
+}
+.hud-judgement.is-miss {
+  color: var(--muted);
+}
+@keyframes hud-pop {
+  from {
+    transform: scale(1.35);
+  }
+}
+.hud-start {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 12px;
+  padding: 0 48px;
+  background: linear-gradient(90deg, transparent 30%, rgb(20 9 26 / 0.92) 68%);
+  text-align: right;
+}
+.hud-start p {
+  max-width: 300px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.hud-start kbd {
+  display: inline-block;
+  padding: 0 6px;
+  border: 1.5px solid var(--pink-light);
+  border-bottom-width: 3px;
+  border-radius: 6px;
+  font: 700 12px/20px var(--pixel);
+  color: var(--pink-light);
+}
+.hud-exit {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid var(--line);
+  border-radius: 50%;
+  background: var(--bg-darkest);
+}
+.hud-exit:hover {
+  border-color: var(--pink);
+}
+.is-beating .hud-volume .bar > span {
+  width: calc(15% + var(--bass, 0) * 85%) !important;
+}
+
 .pillars {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -2472,6 +2570,16 @@ hr {
   }
   .hud-volume {
     left: 24px;
+  }
+  .hud-start {
+    align-items: center;
+    padding: 0 20px;
+    background: rgb(20 9 26 / 0.82);
+    text-align: center;
+  }
+  .hud-exit {
+    right: 12px;
+    bottom: 12px;
   }
   .run-loop {
     padding: 28px;

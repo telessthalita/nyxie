@@ -1,5 +1,7 @@
-﻿import type { CSSProperties, ReactNode } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import type { Crop } from '../data'
+import { isAwake, onWake } from '../wake'
 
 type IconProps = { size?: number; color?: string; className?: string; style?: CSSProperties }
 
@@ -39,13 +41,19 @@ export function Sprite({
   className = '',
   alt = '',
   blend = false,
+  eager = false,
+  poster,
   children,
 }: {
+  /** Capa do vídeo enquanto ele não toca. */
+  poster?: string
   src: string
   crop: Crop
   className?: string
   alt?: string
   blend?: boolean
+  /** Vídeo na primeira dobra: carrega na hora em vez de esperar entrar na tela. */
+  eager?: boolean
   children?: ReactNode
 }) {
   const inner: CSSProperties = {
@@ -57,12 +65,78 @@ export function Sprite({
   return (
     <div className={`sprite ${className}`} style={{ aspectRatio: `${crop.fw} / ${crop.fh}` }}>
       {src.endsWith('.mp4') ? (
-        <video style={inner} src={src} autoPlay muted loop playsInline aria-label={alt} />
+        <LazyVideo style={inner} src={src} eager={eager} label={alt} poster={poster} />
       ) : (
         <img style={inner} className={blend ? 'blend' : ''} src={src} alt={alt} loading="lazy" draggable={false} />
       )}
       {children}
     </div>
+  )
+}
+
+/**
+ * Vídeo decorativo em loop. Só toca depois que a página acorda (ver wake.ts),
+ * só baixa quando chega perto da tela e pausa quando sai dela.
+ * `eager` (vídeo da primeira dobra): já vem com a capa e o endereço no HTML.
+ */
+function LazyVideo({
+  src,
+  style,
+  eager,
+  label,
+  poster,
+}: {
+  src: string
+  style: CSSProperties
+  eager: boolean
+  label: string
+  poster?: string
+}) {
+  const ref = useRef<HTMLVideoElement>(null)
+  const [near, setNear] = useState(eager)
+
+  useEffect(() => {
+    const video = ref.current
+    if (!video) return
+    let visible = eager
+    const sync = () => {
+      if (visible && isAwake()) void video.play().catch(() => {})
+      else video.pause()
+    }
+    const offWake = onWake(sync)
+    if (!('IntersectionObserver' in window)) {
+      visible = true
+      setNear(true)
+      sync()
+      return offWake
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting
+        if (visible) setNear(true)
+        sync()
+      },
+      { rootMargin: '300px 0px' },
+    )
+    io.observe(video)
+    return () => {
+      offWake()
+      io.disconnect()
+    }
+  }, [eager])
+
+  return (
+    <video
+      ref={ref}
+      style={style}
+      src={near ? src : undefined}
+      poster={poster}
+      muted
+      loop
+      playsInline
+      preload={eager ? 'metadata' : 'none'}
+      aria-label={label}
+    />
   )
 }
 
@@ -129,7 +203,7 @@ export function SectionHeader({
 
 export function Logo({ small = false }: { small?: boolean }) {
   return (
-    <a className={`logo${small ? ' small' : ''}`} href="/#topo" aria-label="Nyxie: Dead Air, voltar ao topo">
+    <a className={`logo${small ? ' small' : ''}`} href="/#topo" aria-label="NYXIE DEAD AIR, voltar ao topo">
       <Heart size={small ? 26 : 28} color="#f06ba8" />
       <span className="logo-name">NYXIE</span>
       <span className="logo-sub">DEAD AIR</span>

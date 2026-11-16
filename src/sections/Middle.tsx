@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { CSSProperties } from 'react'
-import { CHAPTERS, CHAR_STATS, HUD_NOTES, KIT, PILLARS, POSES, RUN_STEPS, SKINS, TURNTABLE } from '../data'
+import { HudGame } from './HudGame'
+import { CHAPTERS, CHAR_STATS, KIT, PILLARS, POSES, RUN_STEPS, SKINS, TURNTABLE } from '../data'
 import { Heart, Play, SectionDivider, SectionHeader, Sparkle, Sprite } from '../components/ui'
 
 export function Story() {
@@ -79,7 +80,7 @@ export function Character() {
           <ul className="kit">
             {KIT.map((k) => (
               <li key={k.label}>
-                <Sprite src="/assets/character-sheet.webp" crop={k.crop} className="kit-detail" alt={k.label} />
+                <Sprite src="/assets/character-sheet.webp" crop={k.crop} className="kit-detail" alt="" />
                 <span>{k.label}</span>
               </li>
             ))}
@@ -219,27 +220,7 @@ export function Gameplay() {
         title="Cada batida é um golpe."
         text="Nyxie: Dead Air mistura combate em tempo real com ritmo. Acerte o tempo, encadeie combos e transforme a trilha em arma."
       />
-      <div className="card hud" aria-hidden="true">
-        <span className="hud-glow" />
-        <span className="hud-lane" />
-        <span className="hud-hit" />
-        {HUD_NOTES.map((n, i) => (
-          <span className="hud-note" key={i} style={{ left: `${(n.x / 1400) * 100}%`, background: n.color }}>
-            <Heart size={22} color="#0a0510" style={{ opacity: n.op }} />
-          </span>
-        ))}
-        <span className="hud-judgement">¡PERFEITO!</span>
-        <span className="hud-combo">
-          <small>COMBO</small>
-          x24
-        </span>
-        <span className="hud-volume">
-          <small>VOLUME DO BAIXO</small>
-          <span className="bar">
-            <span style={{ width: '75%' }} />
-          </span>
-        </span>
-      </div>
+      <HudGame />
       <ul className="pillars scroll-row">
         {PILLARS.map((p) => (
           <li className="card pillar hoverable" key={p.title}>

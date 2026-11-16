@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
+import { audioEngine } from '../audio/engine'
+import { onWake } from '../wake'
 
-const SRC = '/assets/trilha-dead-air.mp3'
-const VOLUME = 0.45
 const PREF_KEY = 'nyxie-trilha'
 
 const readPref = () => {
   try {
-    return localStorage.getItem(PREF_KEY) === 'on'
+    // Ligada por padrão: só fica desligada se a pessoa desligou antes.
+    return localStorage.getItem(PREF_KEY) !== 'off'
   } catch {
-    return false
+    return true
   }
 }
 const savePref = (on: boolean) => {
@@ -19,112 +20,86 @@ const savePref = (on: boolean) => {
   }
 }
 
+/** Liga a trilha a partir de qualquer lugar da página (ex.: o botão Jogar do HUD). */
+export async function startSoundtrack() {
+  wanted.on = true
+  savePref(true)
+  await audioEngine.play()
+}
+const wanted = { on: false, pausedByVideo: false }
+
 /**
- * Trilha sonora da landing. Começa desligada (navegadores bloqueiam som sem clique).
+ * Botão da trilha sonora. Começa desligada (navegadores bloqueiam som sem clique).
  * Se a pessoa já tinha ligado antes, volta a tocar no primeiro clique ou tecla na página.
  * Quando um vídeo com som começa, a trilha pausa e volta quando ele para.
  */
 export function Soundtrack() {
-  const audio = useRef<HTMLAudioElement | null>(null)
   const [on, setOn] = useState(false)
   const [blocked, setBlocked] = useState(false)
-  const wantsOn = useRef(false)
-  const pausedByVideo = useRef(false)
+  const button = useRef<HTMLButtonElement>(null)
 
-  const getAudio = () => {
-    if (!audio.current) {
-      const a = new Audio(SRC)
-      a.loop = true
-      a.volume = 0
-      a.preload = 'auto'
-      audio.current = a
-    }
-    return audio.current
-  }
-
-  const fadeId = useRef(0)
-  const fade = (a: HTMLAudioElement, to: number, done?: () => void) => {
-    const id = ++fadeId.current // um fade novo cancela o anterior (ex.: ligar no meio do desligar)
-    const from = a.volume
-    const start = performance.now()
-    const step = (t: number) => {
-      if (id !== fadeId.current) return
-      const k = Math.min(1, (t - start) / 600)
-      a.volume = from + (to - from) * k
-      if (k < 1) requestAnimationFrame(step)
-      else done?.()
-    }
-    requestAnimationFrame(step)
-  }
+  useEffect(() => audioEngine.subscribe(setOn), [])
 
   const play = async () => {
-    const a = getAudio()
     try {
-      await a.play()
-      fade(a, VOLUME)
-      setOn(true)
+      await startSoundtrack()
       setBlocked(false)
-      return true
     } catch {
       setBlocked(true)
-      return false
     }
-  }
-
-  const stop = () => {
-    const a = audio.current
-    setOn(false)
-    if (!a) return
-    fade(a, 0, () => a.pause())
   }
 
   const toggle = () => {
-    if (on) {
-      wantsOn.current = false
+    if (audioEngine.playing) {
+      wanted.on = false
       savePref(false)
-      stop()
+      audioEngine.pause()
     } else {
-      wantsOn.current = true
-      savePref(true)
-      pausedByVideo.current = false
+      wanted.pausedByVideo = false
       void play()
     }
   }
 
-  // Quem já tinha ligado a trilha: volta a tocar na primeira interação com a página.
+  // Trilha ligada por padrão. Tenta tocar ao abrir; os navegadores quase sempre bloqueiam
+  // som antes de qualquer interação, então ela começa no primeiro toque, clique ou tecla.
   useEffect(() => {
     if (!readPref()) return
-    wantsOn.current = true
+    wanted.on = true
+    const cleanup = () => {
+      window.removeEventListener('pointerdown', resume, true)
+      window.removeEventListener('keydown', resume, true)
+    }
     const resume = (e: Event) => {
-      if ((e.target as Element | null)?.closest?.('.sound-toggle')) return
-      if (wantsOn.current) void play()
+      cleanup()
+      if (button.current?.contains(e.target as Node)) return // o próprio botão já decide
+      if (wanted.on && !audioEngine.playing) void play()
+    }
+    window.addEventListener('pointerdown', resume, true)
+    window.addEventListener('keydown', resume, true)
+    // Tenta assim que a página acorda (mexer o mouse, rolar...). Se o navegador ainda
+    // não liberar o som, o clique ou a tecla de cima resolvem.
+    const offWake = onWake(() => {
+      if (wanted.on && !audioEngine.playing) audioEngine.play().then(cleanup, () => {})
+    })
+    return () => {
+      offWake()
       cleanup()
     }
-    const cleanup = () => {
-      window.removeEventListener('pointerdown', resume)
-      window.removeEventListener('keydown', resume)
-    }
-    window.addEventListener('pointerdown', resume)
-    window.addEventListener('keydown', resume)
-    return cleanup
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Vídeo com som tocando: a trilha dá licença.
   useEffect(() => {
     const onPlay = (e: Event) => {
       const v = e.target
-      if (!(v instanceof HTMLVideoElement) || v.muted) return
-      if (audio.current && !audio.current.paused) {
-        pausedByVideo.current = true
-        stop()
-      }
+      if (!(v instanceof HTMLVideoElement) || v.muted || !audioEngine.playing) return
+      wanted.pausedByVideo = true
+      audioEngine.pause()
     }
     const onPause = (e: Event) => {
-      if (!(e.target instanceof HTMLVideoElement) || !pausedByVideo.current || !wantsOn.current) return
+      if (!(e.target instanceof HTMLVideoElement) || !wanted.pausedByVideo || !wanted.on) return
       const otherPlaying = [...document.querySelectorAll('video')].some((v) => !v.paused && !v.muted)
       if (otherPlaying) return
-      pausedByVideo.current = false
+      wanted.pausedByVideo = false
       void play()
     }
     document.addEventListener('play', onPlay, true)
@@ -135,13 +110,11 @@ export function Soundtrack() {
       document.removeEventListener('pause', onPause, true)
       document.removeEventListener('emptied', onPause, true)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  useEffect(() => () => audio.current?.pause(), [])
 
   return (
     <button
+      ref={button}
       type="button"
       className={`sound-toggle${on ? ' is-on' : ''}${blocked ? ' is-blocked' : ''}`}
       onClick={toggle}

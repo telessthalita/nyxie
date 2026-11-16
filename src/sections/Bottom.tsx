@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { EDITIONS, FAQ, HUB_ITEMS, NAV, SOCIALS, WORLDS } from '../data'
 import { FloatingHeart, Heart, Logo, Play, SectionDivider, SectionHeader, Sprite } from '../components/ui'
@@ -140,15 +140,22 @@ const WAITLIST_KEY = 'nyxie-waitlist-email'
 
 export function FinalCta() {
   // Simulação: nada é enviado para servidor. O e-mail fica só no navegador de quem preencheu.
-  const [email, setEmail] = useState(() => {
-    try {
-      return localStorage.getItem(WAITLIST_KEY) ?? ''
-    } catch {
-      return ''
-    }
-  })
-  const [status, setStatus] = useState<'idle' | 'sending' | 'done'>(email ? 'done' : 'idle')
+  // O HTML vem pré-renderizado sem e-mail; quem já se inscreveu vê a confirmação logo após carregar.
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState<'idle' | 'sending' | 'done'>('idle')
   const sent = status === 'done'
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(WAITLIST_KEY)
+      if (saved) {
+        setEmail(saved)
+        setStatus('done')
+      }
+    } catch {
+      // sem armazenamento disponível
+    }
+  }, [])
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -273,16 +280,24 @@ export function Footer() {
         <p>© 2027 Dead Air Studio. Projeto conceitual: estúdio, jogo e preços são fictícios.</p>
         <p className="footer-credit">
           Todos os direitos reservados · Desenvolvido por
-          <img src="/assets/logo-biatriz.webp" alt="Biatriz" width={60} height={17} />
+          <a
+            className="footer-tt"
+            href="https://portfoliobiatriz.beatrizvieiradesigner.workers.dev/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="biatriz, portfólio da designer (abre em nova aba)"
+          >
+            <img src="/assets/logo-biatriz.webp" alt="" width={60} height={17} />
+          </a>
           e
           <a
             className="footer-tt"
             href="https://telessthalita.com.br/"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Thalita Teles, abrir site em nova aba"
+            aria-label="TT, site da Thalita Teles (abre em nova aba)"
           >
-            <img src="/assets/tt.svg" alt="TT" width={22} height={22} />
+            <img src="/assets/tt.svg" alt="" width={22} height={22} />
           </a>
         </p>
       </div>

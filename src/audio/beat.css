@@ -1,0 +1,66 @@
+/*
+ * Página no ritmo. Só vale com a trilha tocando (classe .is-beating no <html>).
+ * --bass e --kick são escritos a cada quadro pelo BeatPulse.
+ * Uso a propriedade `scale`, separada de `transform`, para somar com as animações que já existem
+ * (corações flutuando, anéis girando) sem sobrescrever nenhuma.
+ */
+
+.is-beating .glow-pink {
+  scale: calc(1 + var(--bass, 0) * 0.22);
+  opacity: calc(0.75 + var(--bass, 0) * 0.5);
+}
+.is-beating .glow-purple {
+  scale: calc(1 + var(--bass, 0) * 0.15);
+}
+
+.is-beating .hero-title-2 {
+  text-shadow: 0 0 calc(var(--bass, 0) * 28px) rgb(240 107 168 / 0.85);
+}
+
+.is-beating .ring-inner {
+  scale: calc(1 + var(--kick, 0) * 0.05);
+  box-shadow:
+    0 0 calc(var(--kick, 0) * 34px) rgb(240 107 168 / 0.75),
+    inset 0 0 calc(var(--kick, 0) * 24px) rgb(240 107 168 / 0.5);
+}
+.is-beating .ring-outer {
+  scale: calc(1 + var(--bass, 0) * 0.04);
+}
+
+.is-beating .fheart {
+  scale: calc(1 + var(--kick, 0) * 0.28);
+}
+
+.is-beating .marquee {
+  filter: brightness(calc(1 + var(--kick, 0) * 0.22));
+}
+.is-beating .marquee-item svg {
+  scale: calc(1 + var(--kick, 0) * 0.5);
+}
+
+.is-beating .divider-center {
+  scale: calc(1 + var(--kick, 0) * 0.2);
+}
+
+.is-beating .play-btn-disc {
+  box-shadow: 0 10px calc(32px + var(--bass, 0) * 40px) rgb(240 107 168 / calc(0.6 + var(--bass, 0) * 0.4));
+}
+
+.is-beating .skin-ring {
+  scale: calc(1 + var(--kick, 0) * 0.04);
+}
+
+.is-beating .hud-hit {
+  scale: calc(1 + var(--kick, 0) * 0.12);
+}
+.is-beating .hud-glow {
+  opacity: calc(0.7 + var(--bass, 0) * 0.6);
+}
+
+.is-beating .cta-card {
+  box-shadow: 0 0 calc(var(--bass, 0) * 60px) rgb(240 107 168 / 0.45);
+}
+
+.is-beating .sound-toggle {
+  scale: calc(1 + var(--kick, 0) * 0.12);
+}
