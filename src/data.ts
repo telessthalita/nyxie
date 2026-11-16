@@ -1,10 +1,10 @@
-export const NAV = [
-  { label: 'História', href: '#historia' },
-  { label: 'Personagem', href: '#personagem' },
-  { label: 'Jogabilidade', href: '#jogabilidade' },
-  { label: 'Mundos', href: '#mundos' },
-  { label: 'Edições', href: '#edicoes' },
-  { label: 'FAQ', href: '#faq' },
+﻿export const NAV = [
+  { label: 'História', href: '/#historia' },
+  { label: 'Personagem', href: '/#personagem' },
+  { label: 'Jogabilidade', href: '/#jogabilidade' },
+  { label: 'Mundos', href: '/#mundos' },
+  { label: 'Edições', href: '/#edicoes' },
+  { label: 'FAQ', href: '/#faq' },
 ]
 
 export const SOCIALS = ['TikTok', 'Discord', 'YouTube', 'Steam']

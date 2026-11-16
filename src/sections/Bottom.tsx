@@ -254,6 +254,11 @@ export function Footer() {
               <a href={l.href}>{l.label}</a>
             </li>
           ))}
+          <li>
+            <a className="footer-bts" href="/bastidores">
+              {'</>'} Bastidores
+            </a>
+          </li>
         </ul>
         <ul className="socials">
           {SOCIALS.map((s) => (

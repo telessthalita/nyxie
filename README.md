@@ -4,6 +4,13 @@ Landing page de estudo para um jogo fictício, um RPG de ritmo e ação. Estúdi
 
 Design de biatriz no Figma, código de [Thalita Teles](https://telessthalita.com.br/).
 
+## Bastidores e modo Raio-X
+
+- **/bastidores**: case do projeto, com quem fez o quê, o caminho do Figma ao deploy e o registro das 9 decisões técnicas (contexto, decisão, o que foi descartado e o custo assumido).
+- **Raio-X**: na landing, o botão flutuante (ou a tecla `X`) desenha os frames do Figma por cima da página e mostra a decisão técnica de cada parte.
+
+Decisões e notas ficam em `src/bastidores/decisions.ts`.
+
 ## Stack
 
 - Vite + React + TypeScript

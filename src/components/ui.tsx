@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react'
+﻿import type { CSSProperties, ReactNode } from 'react'
 import type { Crop } from '../data'
 
 type IconProps = { size?: number; color?: string; className?: string; style?: CSSProperties }
@@ -129,7 +129,7 @@ export function SectionHeader({
 
 export function Logo({ small = false }: { small?: boolean }) {
   return (
-    <a className={`logo${small ? ' small' : ''}`} href="#topo" aria-label="Nyxie: Dead Air, voltar ao topo">
+    <a className={`logo${small ? ' small' : ''}`} href="/#topo" aria-label="Nyxie: Dead Air, voltar ao topo">
       <Heart size={small ? 26 : 28} color="#f06ba8" />
       <span className="logo-name">NYXIE</span>
       <span className="logo-sub">DEAD AIR</span>

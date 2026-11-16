@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import { Featured, Hero, Marquee, MobileMenu, Navbar, TrailerModal } from './sections/Top'
 import { Character, Gameplay, Poses, Skins, Story } from './sections/Middle'
 import { Editions, Faq, FinalCta, Footer, Hub, Worlds } from './sections/Bottom'
+import { Xray } from './bastidores/Xray'
 
 export default function App() {
   const [menu, setMenu] = useState(false)
@@ -31,6 +32,7 @@ export default function App() {
       <Footer />
       <MobileMenu open={menu} onClose={closeMenu} onTrailer={openTrailer} />
       <TrailerModal open={trailer} onClose={closeTrailer} />
+      <Xray />
     </>
   )
 }
