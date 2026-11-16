@@ -10,7 +10,7 @@ O layout chegou pronto no Figma. Este repositório é a outra metade do trabalho
 
 | Papel | Quem | O quê |
 |---|---|---|
-| Design | [biatriz](https://portfoliobiatriz.beatrizvieiradesigner.workers.dev/) | Layout em três tamanhos de tela, componentes com variantes e direção de arte no Figma |
+| Design | [biatriz](https://portfoliobiatriz.beatrizvieiradesigner.workers.dev/) | UI e web design, motion e curadoria das artes (personagem e vídeos gerados com IA) no Figma, com componentes em atomic design |
 | Direção técnica e entrega | [Thalita Teles](https://telessthalita.com.br/) | Escopo, revisão de cada etapa, decisões de produto, versionamento e publicação |
 | Desenvolvimento assistido por IA | Claude | Leitura do arquivo do Figma e implementação do código, guiada e revisada |
 
@@ -130,7 +130,7 @@ As decisões 10 a 14 são os diferenciais: o que esta landing faz e o Figma não
 ### 10. A página pulsa no ritmo da própria trilha
 
 - **Contexto:** o jogo é um "RPG de ritmo", mas uma landing comum só toca música de fundo.
-- **Decisão:** a trilha passa por um grafo da Web Audio API (`<audio>` → analisador de frequências → volume → alto-falante). A cada quadro, a energia dos graves (40 a 250 Hz) vira a variável CSS `--bass`, e a batida vira `--kick`. A batida vem do relógio da trilha mais o BPM, que eu medi na própria música por autocorrelação de onsets (≈120,25 BPM, primeira batida em 0,068 s). Brilho, anéis, corações e letreiro reagem a essas duas variáveis, sem nenhum estado React mudando por quadro.
+- **Decisão:** a trilha passa por um grafo da Web Audio API (`<audio>` → analisador de frequências → volume → alto-falante). A cada quadro, a energia dos graves (40 a 250 Hz) vira a variável CSS `--bass`, e a batida vira `--kick`. A batida vem do relógio da trilha mais o BPM, medido na própria música por autocorrelação de onsets (≈120,25 BPM, primeira batida em 0,068 s). Brilho, anéis, corações e letreiro reagem a essas duas variáveis, sem nenhum estado React mudando por quadro.
 - **Descartado:** detectar a batida só pelo volume (falhava nesta trilha, que tem grave constante); bibliotecas de visualização de áudio.
 - **Custo:** a medição do BPM vale para esta faixa. Trocar a trilha exige medir de novo.
 
