@@ -2057,6 +2057,9 @@ hr {
   font-size: 14px;
   color: var(--muted);
 }
+.footer-links .footer-bts {
+  color: var(--pink-light);
+}
 .footer-links a:hover {
   color: var(--pink-light);
 }
@@ -2158,7 +2161,7 @@ hr {
 .sound-toggle {
   position: fixed;
   right: 20px;
-  bottom: 88px;
+  bottom: 20px;
   z-index: 40;
   display: grid;
   place-items: center;
@@ -2522,8 +2525,8 @@ hr {
 
 @media (max-width: 700px) {
   .sound-toggle {
-    right: 10px;
-    bottom: 74px;
+    right: 12px;
+    bottom: 12px;
     width: 52px;
     height: 52px;
   }

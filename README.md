@@ -20,7 +20,6 @@ O layout chegou pronto no Figma. Este repositório é a outra metade do trabalho
 - FAQ em acordeão, menu mobile em tela cheia e animações em CSS
 - Lista de espera simulada (veja a decisão 08)
 - Trilha sonora com botão de liga e desliga, que pausa sozinha quando um vídeo com som toca
-- **Modo Raio-X**: um botão flutuante (ou a tecla `X`) desenha os frames do Figma por cima da página e mostra a decisão técnica de cada parte
 
 ## Em números
 
@@ -29,7 +28,7 @@ O layout chegou pronto no Figma. Este repositório é a outra metade do trabalho
 | Camadas do Figma lidas direto do arquivo | ~18 mil |
 | Peso das imagens | 9,7 MB → 842 KB (−91%) |
 | Dependências em produção | 2 (`react` e `react-dom`) |
-| JavaScript + CSS, comprimidos | ~95 KB |
+| JavaScript + CSS, comprimidos | ~90 KB |
 
 ## Decisões técnicas
 
@@ -138,5 +137,4 @@ npm run build
 - `src/data.ts`: textos, skins, mundos, edições e FAQ
 - `src/sections/`: as seções da página
 - `src/components/`: ícones, peças reutilizáveis e a trilha sonora
-- `src/raio-x/`: o modo Raio-X e as notas de cada decisão
 - `public/assets/`: imagens, vídeos e áudio

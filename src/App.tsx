@@ -2,7 +2,6 @@ import { useCallback, useState } from 'react'
 import { Featured, Hero, Marquee, MobileMenu, Navbar, TrailerModal } from './sections/Top'
 import { Character, Gameplay, Poses, Skins, Story } from './sections/Middle'
 import { Editions, Faq, FinalCta, Footer, Hub, Worlds } from './sections/Bottom'
-import { Xray } from './raio-x/Xray'
 import { Soundtrack } from './components/Soundtrack'
 
 export default function App() {
@@ -34,7 +33,6 @@ export default function App() {
       <MobileMenu open={menu} onClose={closeMenu} onTrailer={openTrailer} />
       <TrailerModal open={trailer} onClose={closeTrailer} />
       <Soundtrack />
-      <Xray />
     </>
   )
 }
