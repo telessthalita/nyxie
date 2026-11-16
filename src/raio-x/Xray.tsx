@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { DECISIONS, XRAY_NOTES } from './decisions'
+import './raio-x.css'
+
+/** O registro completo das decisões fica no README do repositório. */
+export const README_URL = 'https://github.com/telessthalita/nyxie#readme'
+const decisionUrl = (id: string) => `https://github.com/telessthalita/nyxie#${id}`
 
 type Target = { el: Element; frame: string; note: string; n: string; title: string; id: string }
 
@@ -60,7 +65,9 @@ export function Xray() {
       {on && (
         <div className="xray-banner" role="status">
           Modo Raio-X: cada nota mostra uma decisão técnica.{' '}
-          <a href="/bastidores">Ver o case completo</a>
+          <a href={README_URL} target="_blank" rel="noopener noreferrer">
+            Ver todas no README
+          </a>
         </div>
       )}
       {targets.map((t) =>
@@ -69,7 +76,9 @@ export function Xray() {
             <span className="xray-note-tag">DECISÃO {t.n}</span>
             <strong>{t.title}</strong>
             <p>{t.note}</p>
-            <a href={`/bastidores#${t.id}`}>Por que assim →</a>
+            <a href={decisionUrl(t.id)} target="_blank" rel="noopener noreferrer">
+              Por que assim →
+            </a>
           </aside>,
           t.el,
           t.id + t.frame,

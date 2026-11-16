@@ -255,8 +255,8 @@ export function Footer() {
             </li>
           ))}
           <li>
-            <a className="footer-bts" href="/bastidores">
-              {'</>'} Bastidores
+            <a className="footer-bts" href="https://github.com/telessthalita/nyxie#readme" target="_blank" rel="noopener noreferrer">
+              {'</>'} Como foi feito
             </a>
           </li>
         </ul>

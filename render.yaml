@@ -10,8 +10,3 @@ services:
         name: Cache-Control
         # Uma semana: as imagens em public/assets não têm hash no nome.
         value: public, max-age=604800
-    routes:
-      # Página de bastidores: o mesmo index.html decide o que mostrar.
-      - type: rewrite
-        source: /bastidores
-        destination: /index.html

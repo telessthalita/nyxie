@@ -1,6 +1,6 @@
-/**
+﻿/**
  * Registro de decisões do projeto (no estilo ADR: contexto, decisão, alternativas, custo).
- * Alimenta a página /bastidores e as notas do modo Raio-X.
+ * Alimenta as notas do modo Raio-X. A versão completa está no README.
  */
 export type Decision = {
   id: string
@@ -113,7 +113,7 @@ export const DECISIONS: Decision[] = [
     title: 'Site estático no Render, com infra descrita em código',
     context: 'Sem servidor para manter, o site pode ser só arquivos.',
     decision:
-      'Hospedagem estática gratuita no Render, configurada no render.yaml versionado no repositório: build, pasta publicada, cache dos assets e rota para esta página.',
+      'Hospedagem estática gratuita no Render, configurada no render.yaml versionado no repositório: build, pasta publicada e cache dos assets.',
     rejected: 'Configurar tudo à mão no painel, sem registro do que foi feito.',
     tradeoff: 'Mudanças de infra passam a exigir commit, o que é proposital.',
   },
@@ -163,21 +163,4 @@ export const XRAY_NOTES: { selector: string; frame: string; decision: string; no
     decision: 'lista',
     note: 'O formulário simula o envio de ponta a ponta, mas não coleta dado de ninguém.',
   },
-]
-
-export const NUMBERS = [
-  { value: '18 mil', label: 'camadas do Figma lidas direto do arquivo' },
-  { value: '−91%', label: 'no peso das imagens: 9,7 MB viraram 842 KB' },
-  { value: '2', label: 'dependências em produção: react e react-dom' },
-  { value: '94 KB', label: 'de JavaScript e CSS, já comprimidos' },
-]
-
-export const STACK = ['Vite', 'React 19', 'TypeScript', 'CSS puro', 'sharp', 'Git + GitHub', 'Render']
-
-export const PIPELINE = [
-  { title: 'Design', text: 'Layout, componentes, variantes e artes no Figma.' },
-  { title: 'Leitura', text: 'O .fig decodificado em medidas, textos e recortes exatos.' },
-  { title: 'Arquitetura', text: 'Stack, estrutura de pastas e o que fica fora do escopo.' },
-  { title: 'Implementação', text: '13 seções, 3 tamanhos de tela e as interações do design.' },
-  { title: 'Publicação', text: 'Revisão, versionamento no GitHub e deploy estático.' },
 ]
